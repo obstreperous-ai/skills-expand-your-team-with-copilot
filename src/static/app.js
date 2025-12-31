@@ -106,6 +106,22 @@ document.addEventListener("DOMContentLoaded", () => {
     fetchActivities();
   }
 
+  // Function to set difficulty filter
+  function setDifficultyFilter(difficulty) {
+    currentDifficulty = difficulty;
+
+    // Update active class
+    difficultyFilters.forEach((btn) => {
+      if (btn.dataset.difficulty === difficulty) {
+        btn.classList.add("active");
+      } else {
+        btn.classList.remove("active");
+      }
+    });
+
+    fetchActivities();
+  }
+
   // Check if user is already logged in (from localStorage)
   function checkAuthentication() {
     const savedUser = localStorage.getItem("currentUser");
@@ -401,18 +417,14 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
 
+      // Handle difficulty filter
+      if (currentDifficulty) {
+        queryParams.push(`difficulty=${encodeURIComponent(currentDifficulty)}`);
+      }
+
       const queryString =
         queryParams.length > 0 ? `?${queryParams.join("&")}` : "";
-      
-      // Add difficulty filter if present
-      const finalQueryParams = [...queryParams];
-      if (currentDifficulty) {
-        finalQueryParams.push(`difficulty=${encodeURIComponent(currentDifficulty)}`);
-      }
-      
-      const finalQueryString =
-        finalQueryParams.length > 0 ? `?${finalQueryParams.join("&")}` : "";
-      const response = await fetch(`/activities${finalQueryString}`);
+      const response = await fetch(`/activities${queryString}`);
       const activities = await response.json();
 
       // Save the activities data
@@ -662,13 +674,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Add event listeners for difficulty filter buttons
   difficultyFilters.forEach((button) => {
     button.addEventListener("click", () => {
-      // Update active class
-      difficultyFilters.forEach((btn) => btn.classList.remove("active"));
-      button.classList.add("active");
-
-      // Update current difficulty filter and fetch activities
-      currentDifficulty = button.dataset.difficulty;
-      fetchActivities();
+      setDifficultyFilter(button.dataset.difficulty);
     });
   });
 
