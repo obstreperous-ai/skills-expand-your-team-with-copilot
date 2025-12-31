@@ -496,6 +496,73 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // Escape HTML to prevent XSS
+  function escapeHtml(text) {
+    const div = document.createElement("div");
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  // Handle social sharing
+  function handleShare(event) {
+    const button = event.currentTarget;
+    const activityName = button.dataset.activity;
+    const description = button.dataset.description || "";
+    const schedule = button.dataset.schedule || "";
+
+    // Build the share URL and text
+    const pageUrl = window.location.href.split("?")[0]; // Remove any query params
+    const shareUrl = `${pageUrl}?activity=${encodeURIComponent(activityName)}`;
+    const shareText = `Check out ${activityName} at Mergington High School! ${description} Schedule: ${schedule}`;
+
+    if (button.classList.contains("share-twitter")) {
+      // Share on Twitter/X
+      const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+        shareText
+      )}&url=${encodeURIComponent(shareUrl)}`;
+      window.open(twitterUrl, "_blank", "width=600,height=400");
+    } else if (button.classList.contains("share-facebook")) {
+      // Share on Facebook
+      const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+        shareUrl
+      )}`;
+      window.open(facebookUrl, "_blank", "width=600,height=400");
+    } else if (button.classList.contains("share-email")) {
+      // Share via email
+      const subject = encodeURIComponent(
+        `Check out ${activityName} at Mergington High School`
+      );
+      const body = encodeURIComponent(
+        `${shareText}\n\nLearn more: ${shareUrl}`
+      );
+      window.location.href = `mailto:?subject=${subject}&body=${body}`;
+    } else if (button.classList.contains("share-copy")) {
+      // Copy link to clipboard
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard
+          .writeText(shareUrl)
+          .then(() => {
+            // Show success feedback
+            const originalIcon = button.querySelector(".share-icon").textContent;
+            button.querySelector(".share-icon").textContent = "✓";
+            button.style.backgroundColor = "var(--success)";
+
+            setTimeout(() => {
+              button.querySelector(".share-icon").textContent = originalIcon;
+              button.style.backgroundColor = "";
+            }, 2000);
+          })
+          .catch((err) => {
+            console.error("Failed to copy link:", err);
+            showMessage("Failed to copy link to clipboard", "error");
+          });
+      } else {
+        // Fallback for browsers that don't support clipboard API
+        showMessage("Clipboard not supported. Please copy the link manually.", "error");
+      }
+    }
+  }
+
   // Function to render a single activity card
   function renderActivityCard(name, details) {
     const activityCard = document.createElement("div");
@@ -576,6 +643,27 @@ document.addEventListener("DOMContentLoaded", () => {
             .join("")}
         </ul>
       </div>
+      <div class="social-share-container">
+        <span class="share-label">Share:</span>
+        <div class="social-share-buttons">
+          <button class="share-button share-twitter tooltip" data-activity="${escapeHtml(name)}" data-description="${escapeHtml(details.description)}" data-schedule="${escapeHtml(formattedSchedule)}" title="Share on Twitter" aria-label="Share on X (Twitter)">
+            <span class="share-icon">𝕏</span>
+            <span class="tooltip-text">Share on X (Twitter)</span>
+          </button>
+          <button class="share-button share-facebook tooltip" data-activity="${escapeHtml(name)}" data-description="${escapeHtml(details.description)}" data-schedule="${escapeHtml(formattedSchedule)}" title="Share on Facebook" aria-label="Share on Facebook">
+            <span class="share-icon">FB</span>
+            <span class="tooltip-text">Share on Facebook</span>
+          </button>
+          <button class="share-button share-email tooltip" data-activity="${escapeHtml(name)}" data-description="${escapeHtml(details.description)}" data-schedule="${escapeHtml(formattedSchedule)}" title="Share via Email" aria-label="Share via Email">
+            <span class="share-icon">✉</span>
+            <span class="tooltip-text">Share via Email</span>
+          </button>
+          <button class="share-button share-copy tooltip" data-activity="${escapeHtml(name)}" data-description="${escapeHtml(details.description)}" data-schedule="${escapeHtml(formattedSchedule)}" title="Copy link" aria-label="Copy link to clipboard">
+            <span class="share-icon">🔗</span>
+            <span class="tooltip-text">Copy link to clipboard</span>
+          </button>
+        </div>
+      </div>
       <div class="activity-card-actions">
         ${
           currentUser
@@ -610,6 +698,14 @@ document.addEventListener("DOMContentLoaded", () => {
         });
       }
     }
+
+    // Add click handlers for social share buttons
+    const shareButtons = activityCard.querySelectorAll(".share-button");
+    shareButtons.forEach((button) => {
+      button.addEventListener("click", (event) => {
+        handleShare(event);
+      });
+    });
 
     activitiesList.appendChild(activityCard);
   }
