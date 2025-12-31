@@ -635,7 +635,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <span class="share-icon">✉</span>
             <span class="tooltip-text">Share via Email</span>
           </button>
-          <button class="share-button share-copy tooltip" data-activity="${escapeHtml(name)}" title="Copy link" aria-label="Copy link to clipboard">
+          <button class="share-button share-copy tooltip" data-activity="${escapeHtml(name)}" data-description="${escapeHtml(details.description)}" data-schedule="${escapeHtml(formattedSchedule)}" title="Copy link" aria-label="Copy link to clipboard">
             <span class="share-icon">🔗</span>
             <span class="tooltip-text">Copy link to clipboard</span>
           </button>
