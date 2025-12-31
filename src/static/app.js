@@ -473,6 +473,13 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // Escape HTML to prevent XSS
+  function escapeHtml(text) {
+    const div = document.createElement("div");
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
   // Handle social sharing
   function handleShare(event) {
     const button = event.currentTarget;
@@ -508,23 +515,28 @@ document.addEventListener("DOMContentLoaded", () => {
       window.location.href = `mailto:?subject=${subject}&body=${body}`;
     } else if (button.classList.contains("share-copy")) {
       // Copy link to clipboard
-      navigator.clipboard
-        .writeText(shareUrl)
-        .then(() => {
-          // Show success feedback
-          const originalIcon = button.querySelector(".share-icon").textContent;
-          button.querySelector(".share-icon").textContent = "✓";
-          button.style.backgroundColor = "var(--success)";
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard
+          .writeText(shareUrl)
+          .then(() => {
+            // Show success feedback
+            const originalIcon = button.querySelector(".share-icon").textContent;
+            button.querySelector(".share-icon").textContent = "✓";
+            button.style.backgroundColor = "var(--success)";
 
-          setTimeout(() => {
-            button.querySelector(".share-icon").textContent = originalIcon;
-            button.style.backgroundColor = "";
-          }, 2000);
-        })
-        .catch((err) => {
-          console.error("Failed to copy link:", err);
-          showMessage("Failed to copy link to clipboard", "error");
-        });
+            setTimeout(() => {
+              button.querySelector(".share-icon").textContent = originalIcon;
+              button.style.backgroundColor = "";
+            }, 2000);
+          })
+          .catch((err) => {
+            console.error("Failed to copy link:", err);
+            showMessage("Failed to copy link to clipboard", "error");
+          });
+      } else {
+        // Fallback for browsers that don't support clipboard API
+        showMessage("Clipboard not supported. Please copy the link manually.", "error");
+      }
     }
   }
 
@@ -611,19 +623,19 @@ document.addEventListener("DOMContentLoaded", () => {
       <div class="social-share-container">
         <span class="share-label">Share:</span>
         <div class="social-share-buttons">
-          <button class="share-button share-twitter tooltip" data-activity="${name}" data-description="${details.description}" data-schedule="${formattedSchedule}" title="Share on Twitter">
+          <button class="share-button share-twitter tooltip" data-activity="${escapeHtml(name)}" data-description="${escapeHtml(details.description)}" data-schedule="${escapeHtml(formattedSchedule)}" title="Share on Twitter" aria-label="Share on X (Twitter)">
             <span class="share-icon">𝕏</span>
             <span class="tooltip-text">Share on X (Twitter)</span>
           </button>
-          <button class="share-button share-facebook tooltip" data-activity="${name}" data-description="${details.description}" data-schedule="${formattedSchedule}" title="Share on Facebook">
-            <span class="share-icon">f</span>
+          <button class="share-button share-facebook tooltip" data-activity="${escapeHtml(name)}" data-description="${escapeHtml(details.description)}" data-schedule="${escapeHtml(formattedSchedule)}" title="Share on Facebook" aria-label="Share on Facebook">
+            <span class="share-icon">FB</span>
             <span class="tooltip-text">Share on Facebook</span>
           </button>
-          <button class="share-button share-email tooltip" data-activity="${name}" data-description="${details.description}" data-schedule="${formattedSchedule}" title="Share via Email">
+          <button class="share-button share-email tooltip" data-activity="${escapeHtml(name)}" data-description="${escapeHtml(details.description)}" data-schedule="${escapeHtml(formattedSchedule)}" title="Share via Email" aria-label="Share via Email">
             <span class="share-icon">✉</span>
             <span class="tooltip-text">Share via Email</span>
           </button>
-          <button class="share-button share-copy tooltip" data-activity="${name}" title="Copy link">
+          <button class="share-button share-copy tooltip" data-activity="${escapeHtml(name)}" title="Copy link" aria-label="Copy link to clipboard">
             <span class="share-icon">🔗</span>
             <span class="tooltip-text">Copy link to clipboard</span>
           </button>
