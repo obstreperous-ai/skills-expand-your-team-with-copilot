@@ -34,36 +34,36 @@
 
 /* Dark mode colors */
 body.dark-mode {
-  /* Primary colors */
+  /* Primary colors - adjusted for dark mode */
   --primary: #5c6bc0;
   --primary-light: #8e99f3;
   --primary-dark: #26418f;
   --primary-text: #ffffff;
 
-  /* Secondary colors */
-  --secondary: #ff9800;
-  --secondary-light: #ffc947;
-  --secondary-dark: #c66900;
-  --secondary-text: #000000;
+  /* Secondary colors - slightly brighter for visibility */
+  --secondary: #ff8f00;
+  --secondary-light: #ffc046;
+  --secondary-dark: #c56000;
+  --secondary-text: #ffffff;
 
-  /* Neutral colors */
+  /* Neutral colors - dark theme */
   --background: #121212;
   --surface: #1e1e1e;
   --text-primary: #e0e0e0;
   --text-secondary: #b0b0b0;
-  --border: #333333;
+  --border: #404040;
   --border-light: #2a2a2a;
-  --border-focus: #404040;
+  --border-focus: #505050;
 
-  /* Feedback colors */
+  /* Feedback colors - adjusted for dark backgrounds */
   --success: #66bb6a;
   --success-light: #1b5e20;
   --warning: #ffa726;
-  --warning-light: #e65100;
+  --warning-light: #4e2a00;
   --error: #ef5350;
-  --error-light: #b71c1c;
+  --error-light: #4e1e1e;
   --info: #29b6f6;
-  --info-light: #01579b;
+  --info-light: #014361;
 }
 
 * {
@@ -727,76 +727,44 @@ footer {
   background-color: rgba(255, 255, 255, 0.3);
 }
 
-/* Social sharing buttons */
-.social-share-container {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 10px;
-  padding-top: 10px;
-  border-top: 1px solid var(--border-light);
-}
-
-.share-label {
-  font-size: 0.75rem;
-  color: var(--text-secondary);
-  font-weight: 600;
-}
-
-.social-share-buttons {
-  display: flex;
-  gap: 5px;
-  flex-wrap: wrap;
-}
-
-.share-button {
-  background-color: var(--background);
-  border: 1px solid var(--border);
-  color: var(--text-primary);
-  padding: 4px 8px;
+/* Dark mode toggle button */
+#dark-mode-toggle {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border: none;
   border-radius: 50%;
-  font-size: 0.75rem;
+  width: 40px;
+  height: 40px;
   cursor: pointer;
-  transition: all 0.2s ease;
-  width: 28px;
-  height: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+  padding: 0;
 }
 
-.share-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+#dark-mode-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
 }
 
-.share-button .share-icon {
-  font-size: 0.9rem;
-  line-height: 1;
-  font-weight: 600;
+/* Adjust user controls position when dark mode toggle is present */
+#user-controls {
+  right: 65px;
 }
 
-.share-twitter:hover {
-  background-color: #1da1f2;
-  border-color: #1da1f2;
-  color: white;
+/* Smooth transition for dark mode */
+body {
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.share-facebook:hover {
-  background-color: #1877f2;
-  border-color: #1877f2;
-  color: white;
-}
-
-.share-email:hover {
-  background-color: var(--warning);
-  border-color: var(--warning);
-  color: white;
-}
-
-.share-copy:hover {
-  background-color: var(--primary);
-  border-color: var(--primary);
-  color: white;
+header,
+section,
+.activity-card,
+.sidebar-filters,
+.modal-content {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
