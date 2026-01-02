@@ -14,6 +14,9 @@
         <span id="dark-mode-icon">🌙</span>
       </button>
       <div id="user-controls">
+        <button id="theme-toggle" class="icon-button" aria-label="Toggle theme">
+          <span id="theme-icon">🌙</span>
+        </button>
         <div id="user-status">
           <button id="login-button" class="icon-button">
             <span class="user-icon">👤</span>
@@ -100,6 +103,28 @@
                   After School
                 </button>
                 <button class="time-filter" data-time="weekend">Weekend</button>
+              </div>
+            </div>
+
+            <!-- Difficulty Filter -->
+            <div class="filter-container difficulty-filter-container">
+              <div class="filter-label">Filter by difficulty:</div>
+              <div class="difficulty-filters" id="difficulty-filters">
+                <button class="difficulty-filter active" data-difficulty="">
+                  All Levels
+                </button>
+                <button class="difficulty-filter" data-difficulty="Beginner">
+                  Beginner
+                </button>
+                <button class="difficulty-filter" data-difficulty="Intermediate">
+                  Intermediate
+                </button>
+                <button class="difficulty-filter" data-difficulty="Advanced">
+                  Advanced
+                </button>
+                <button class="difficulty-filter" data-difficulty="All">
+                  All (Unspecified Only)
+                </button>
               </div>
             </div>
           </aside>

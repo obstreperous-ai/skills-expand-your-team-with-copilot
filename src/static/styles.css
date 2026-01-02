@@ -239,6 +239,12 @@ section h3 {
   letter-spacing: 0.3px;
 }
 
+/* Dark mode adjustments for activity tags */
+body.dark-mode .activity-tag {
+  background: rgba(232, 234, 246, 0.2);
+  color: #b3bcf5;
+}
+
 /* Capacity Indicator */
 .capacity-container {
   margin: 8px 0;
@@ -573,7 +579,8 @@ footer {
 
 .category-filters,
 .day-filters,
-.time-filters {
+.time-filters,
+.difficulty-filters {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
@@ -581,7 +588,8 @@ footer {
 
 .category-filter,
 .day-filter,
-.time-filter {
+.time-filter,
+.difficulty-filter {
   background-color: var(--background);
   border: 1px solid var(--border);
   color: var(--text-primary);
@@ -594,7 +602,8 @@ footer {
 
 .category-filter.active,
 .day-filter.active,
-.time-filter.active {
+.time-filter.active,
+.difficulty-filter.active {
   background-color: var(--primary);
   color: white;
   border-color: var(--primary-dark);
@@ -602,12 +611,14 @@ footer {
 
 .category-filter:hover,
 .day-filter:hover,
-.time-filter:hover {
+.time-filter:hover,
+.difficulty-filter:hover {
   background-color: var(--primary-light);
   color: white;
 }
 
-.time-filters {
+.time-filters,
+.difficulty-filters {
   width: 100%;
 }
 
@@ -651,6 +662,23 @@ footer {
   position: absolute;
   top: 10px;
   right: 15px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+#theme-toggle {
+  padding: 4px 8px;
+  font-size: 1.2rem;
+}
+
+#theme-icon {
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+#theme-toggle:hover #theme-icon {
+  transform: rotate(20deg);
 }
 
 #user-status {
